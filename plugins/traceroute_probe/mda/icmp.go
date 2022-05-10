@@ -376,7 +376,11 @@ func (app *ICMPApp) isPerFlow(ttl uint8) bool {
 
 	time.Sleep(time.Duration(float64(utils.ConfigData.Timeout) + 6*utils.ConfigData.PacketRate))
 
-	return !app.matchCache.FlowIDCache.Repeat
+	repeat := app.matchCache.FlowIDCache.Repeat
+	if repeat {
+		app.matchCache.FlowIDCache.Repeat = false
+	}
+	return !repeat
 }
 
 // 指定ttl和id发送ICMP报文
